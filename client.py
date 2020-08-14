@@ -3,7 +3,7 @@ import threading
 from tkinter import *
 from tkinter import font 
 from tkinter import ttk 
-import time
+from datetime import date, timedelta
 
 # import all functions / 
 # everthing from chat.py file 
@@ -132,8 +132,13 @@ class GUI:
 				else: 
 					# insert messages to text box 
 					self.textCons.config(state = NORMAL) 
-					self.textCons.insert(END, 
-										message+"\n\n")
+					self.textCons.insert(END, message+"\n\n")
+					#When client sends "Download" message to server, server sends chat history and its written in .txt file.
+					if f"Reached chat history end : {self.name} {(date.today() - timedelta(7)).strftime('%d/%m/%Y')} to {date.today().strftime('%d/%m/%Y')}" in message:
+                                                f= open("chathistory.txt","w+")
+                                                f.write(message)
+                                                f.close()
+
                                           
 					
 					self.textCons.config(state = DISABLED) 
@@ -150,15 +155,8 @@ class GUI:
 		while True: 
 			message = (f"{self.name}: {self.msg}")
 			client.send(message.encode(FORMAT))
-			break
-
-			if self.msg=="Download":
-                                with open('chathistory.txt', 'a') as f:
-                                        for i in history:
-                                                f.write(i)
-                                f.close()
-                        
+			
+			break                      
 				
-
 # create a GUI class object 
 g = GUI() 
