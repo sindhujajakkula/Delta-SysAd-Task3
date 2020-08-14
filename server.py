@@ -166,7 +166,8 @@ def handle(name, conn, addr):
             print(from_date)
             req_index=0
             conn.send(f"Download Chat History {name} {(date.today() - timedelta(7)).strftime('%d/%m/%Y')} to {date.today().strftime('%d/%m/%Y')}".encode(FORMAT))
-            for i in range(len(save)):
+            chathistory=""
+	    for i in range(len(save)):
                 if save[i][2] == from_date:
                     req_index = i
                     break
@@ -175,7 +176,7 @@ def handle(name, conn, addr):
                 req_index=len(save)
                 for i in range(req_index):
                     if name == "Chief": 
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
                     
                     elif name == "Army General":
                         army_general_contact = ["Chief",name]
@@ -183,7 +184,7 @@ def handle(name, conn, addr):
                             army_general_contact.append("Army"+str(s))
                             
                         if save[req_index-i-1][0] in army_general_contact:
-                            conn.send(save[req_index-i-1][1].encode(FORMAT))
+                            chathistory = chathistory + " || " +save[req_index-i-1][1]
                             
                     elif name == "Navy General":
                         navy_general_contact = ["Chief",name]
@@ -191,7 +192,7 @@ def handle(name, conn, addr):
                             navy_general_contact.append("Navy"+str(s))
                             
                         if save[req_index-i-1][0] in navy_general_contact:
-                            conn.send(save[req_index-i-1][1].encode(FORMAT))
+                            chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                     elif name == "Air Force General":
                         airforce_general_contact = ["Chief",name]
@@ -199,29 +200,29 @@ def handle(name, conn, addr):
                             airforce_general_contact.append("Air Force"+str(s))
                             
                         if save[req_index-i-1][0] in airforce_general_contact:
-                            conn.send(save[req_index-i-1][1].encode(FORMAT))
+                            chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                     elif name in army:
                         army.append("Army General")
                         if save[req_index-i-1][0] in army:
-                            conn.send(save[req_index-i-1][1].encode(FORMAT))
+                            chathistory = chathistory + " || " +save[req_index-i-1][1]
                             
                     elif name in navy:
                         navy.append("Navy General")
                         if save[req_index-i-1][0] in navy:
-                            conn.send(save[req_index-i-1][1].encode(FORMAT))
+                            chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                     elif name in airforce:
                         airforce.append("Air Force General")
                         if save[req_index-i-1][0] in airforce:
-                            conn.send(save[req_index-i-1][1].encode(FORMAT))
+                            chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                 
             #messaages of past 7 days are sent
             for i in range(req_index):
                 
                 if name == "Chief": 
-                    conn.send(save[req_index-i-1][1].encode(FORMAT))
+                    chathistory = chathistory + " || " +save[req_index-i-1][1]
                         
 
                 elif name == "Army General":
@@ -230,7 +231,7 @@ def handle(name, conn, addr):
                         army_general_contact.append("Army"+str(s))
                             
                     if save[req_index-i-1][0] in army_general_contact:
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                             
                 elif name == "Navy General":
@@ -239,7 +240,7 @@ def handle(name, conn, addr):
                         navy_general_contact.append("Navy"+str(s))
                             
                     if save[req_index-i-1][0] in navy_general_contact:
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                 elif name == "Air Force General":
                     airforce_general_contact = ["Chief",name]
@@ -247,23 +248,23 @@ def handle(name, conn, addr):
                         airforce_general_contact.append("Air Force"+str(s))
                             
                     if save[req_index-i-1][0] in airforce_general_contact:
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                 elif name in army:
                     army.append("Army General")
                     if save[req_index-i-1][0] in army:
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
                             
                 elif name in navy:
                     navy.append("Navy General")
                     if save[req_index-i-1][0] in navy:
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
 
                 elif name in airforce:
                     airforce.append("Air Force General")
                     if save[req_index-i-1][0] in airforce:
-                        conn.send(save[req_index-i-1][1].encode(FORMAT))
-            conn.send(f"Reached chat history end : {name} {(date.today() - timedelta(7)).strftime('%d/%m/%Y')} to {date.today().strftime('%d/%m/%Y')}".encode(FORMAT))
+                        chathistory = chathistory + " || " +save[req_index-i-1][1]
+            conn.send(f"{chathistory} Reached chat history end : {name} {(date.today() - timedelta(7)).strftime('%d/%m/%Y')} to {date.today().strftime('%d/%m/%Y')}".encode(FORMAT))
         else:        
             s_message= message.decode(FORMAT)
             save.insert(0, [s_message[0:s_message.index(":")], s_message, date.today().strftime("%d/%m/%Y")])
